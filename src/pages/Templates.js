@@ -23,7 +23,7 @@ function Templates() {
       headers: { Authorization: token },
     };
     axios
-      .get("http://localhost:3100/api/v1/user/viewtemplates", config)
+      .get("https://tgmsgback.thundergits.com/api/v1/user/viewtemplates", config)
       .then((res) => {
         setTemplates(res.data.templates);
       })
@@ -55,7 +55,7 @@ function Templates() {
 
   const onHandleConfirm = () => {
     axios
-      .post(`http://localhost:3100/api/v1/user/deletetemplate/${templateId}`)
+      .post(`https://tgmsgback.thundergits.com/api/v1/user/deletetemplate/${templateId}`)
       .then((res) => {
         console.log("successfully deleted");
         setModalClose(true);

@@ -14,7 +14,7 @@ function SentDetails() {
       headers: { Authorization: token },
     };
     axios
-      .get("http://localhost:3100/api/v1/user/sentdetails", config)
+      .get("https://tgmsgback.thundergits.com/api/v1/user/sentdetails", config)
       .then((res) => {
         console.log(res.data.mails);
         setData(res.data.mails);

@@ -22,7 +22,7 @@ function Send() {
       headers: { Authorization: token },
     };
     axios
-      .get("http://localhost:3100/api/v1/user/viewgroups", config)
+      .get("https://tgmsgback.thundergits.com/api/v1/user/viewgroups", config)
       .then((res) => {
         console.log(res.data.groups);
         setGroups(res.data.groups);
@@ -38,7 +38,7 @@ function Send() {
     };
     axios
       .post(
-        "http://localhost:3100/api/v1/user/sendmail",
+        "https://tgmsgback.thundergits.com/api/v1/user/sendmail",
         {
           group,
           subject,

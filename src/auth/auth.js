@@ -3,7 +3,7 @@ import axios from "axios";
 export const signup = (user) => {
   const { firstName, lastName, email, password } = user;
   return axios
-    .post("http://localhost:3100/api/v1/register", {
+    .post("https://tgmsgback.thundergits.com/api/v1/register", {
       firstName,
       lastName,
       email,
@@ -20,7 +20,7 @@ export const signup = (user) => {
 
 export const signin = (email, password) => {
   return axios
-    .post("http://localhost:3100/api/v1/login", { email, password })
+    .post("https://tgmsgback.thundergits.com/api/v1/login", { email, password })
     .then(async (res) => {
       saveToken(res.data.token);
       return {

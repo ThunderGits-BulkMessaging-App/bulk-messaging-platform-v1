@@ -17,7 +17,7 @@ function Sidebar() {
             </span>
 
             <div className='text logo-text'>
-              <span className='name'>MailFlow</span>
+              <span className='name'>TG Messenger</span>
             </div>
           </div>
         </header>

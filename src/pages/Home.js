@@ -15,7 +15,7 @@ function Home() {
       headers: { Authorization: token },
     };
     axios
-      .get("http://localhost:3100/api/v1/user/dashboard", config)
+      .get("https://tgmsgback.thundergits.com/api/v1/user/dashboard", config)
       .then((res) => {
         setData(res.data);
       })
