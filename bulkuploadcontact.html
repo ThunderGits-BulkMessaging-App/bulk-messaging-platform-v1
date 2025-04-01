@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Upload Form</title>
+</head>
+<body>
+    <h1>Bulk Upload Contacts</h1>
+    <form id="uploadForm">
+        <label for="fileUpload">Upload CSV File:</label>
+        <input type="file" id="fileUpload" name="file" accept=".csv">
+        <button type="submit">Upload Contacts</button>
+    </form>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('fileUpload');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            // Replace 'YOUR_ACCESS_TOKEN' with your actual token
+            const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFiaGkuYWcua2FzQGdtYWlsLmNvbSIsImlhdCI6MTc0MzUzMDc3NX0.bO5HwHI-otf3jn5Zv6bYIOHb-m-R528J7pLraeicNfY';
+
+            fetch('http://localhost:3100/api/v1/contacts/upload', {
+                method: 'POST',
+                headers: {
+                    'Authorization': token
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => alert('Upload successful!'))
+            .catch(error => alert('Error uploading contacts: ' + error));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+firstName,lastName,phoneNumber,email,address,groupName
+Alice,Johnson,1234567890,alice.johnson@example.com,"1234 Elm Street, Cityville",Friends
+Bob,Smith,2345678901,bob.smith@example.com,"5678 Maple Street, Townsville",Colleagues
