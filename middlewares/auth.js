@@ -4,24 +4,20 @@ require("dotenv/config");
 
 const protect = async (req, res, next) => {
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
+  if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.Secret_Code);
-      req.user = await User.findOne({ email: decoded.id }).select("-password");
+      req.user = await User.findOne({ email: decoded.id }).select("-password"); // Make sure 'id' should be your user identifier in JWT payload
       next();
     } catch (error) {
       console.error(error);
-      res.status(401).send({ success: false, message: "Not Authorized" });
+      res.status(401).send({ message: "Not Authorized" });
     }
-  }
-
-  if (!token) {
-    res.status(401).send({ sucess: false, message: "Not Authorized" });
+  } else {
+    res.status(401).send({ message: "Not Authorized, token missing" });
   }
 };
+
 
 module.exports = { protect };
