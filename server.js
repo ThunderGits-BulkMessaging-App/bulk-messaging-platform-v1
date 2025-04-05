@@ -3,9 +3,12 @@ const app = express();
 const connectDB = require("./config/db/db");
 const cors = require("cors");
 const morgan = require("morgan");
-const credentialsRoutes = require('./routes/sms.js');
+// const credentialsRoutes = require('./routes/sms.js');
 const contactRoutes = require('./routes/contact.routes.js');
 const groupRoutes = require('./routes/group.routes.js');
+const credentialsRoutes = require('./routes/credentials.routes.js');
+const smsCredentialsRoutes = require('./routes/smsCredentials.routes.js');
+const smsCampaignRoutes = require('./routes/smsCampaign.routes.js');
 require("dotenv").config();
 connectDB();
 app.use(express.json({ limit: "25mb" }));
@@ -17,9 +20,13 @@ const commonRoutes = require("./routes/common");
 
 app.use(`${process.env.BASEURL}/user`, userRoutes);
 app.use(`${process.env.BASEURL}/`, commonRoutes);
-app.use(`${process.env.BASEURL}/sms`, credentialsRoutes);
+// app.use(`${process.env.BASEURL}/sms`, credentialsRoutes);
 app.use(`${process.env.BASEURL}/`, contactRoutes);
 app.use(`${process.env.BASEURL}/group`, groupRoutes);
+app.use(`${process.env.BASEURL}`, credentialsRoutes);
+app.use(`${process.env.BASEURL}`, smsCredentialsRoutes);
+app.use(`${process.env.BASEURL}`, smsCampaignRoutes);
+
 
 const port = process.env.PORT || 3100;
 app.listen(port, () => console.log(`listening on port ${port}`));
