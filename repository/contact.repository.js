@@ -6,7 +6,7 @@ exports.create = (contactData) => {
 };
 
 exports.findAll = () => {
-    return Contact.find();
+    return Contact.find().populate('groups');
 };
 
 exports.update = (id, updateData) => {
