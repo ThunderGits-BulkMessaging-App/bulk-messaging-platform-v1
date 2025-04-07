@@ -2,6 +2,7 @@ const contactService = require('../services/contact.service');
 
 exports.createContact = async (req, res) => {
     try {
+        console.log(req.body);
         const contactData = { ...req.body, createdBy: req.user._id }; // Include createdBy
         const contact = await contactService.createContact(contactData);
         res.status(201).json(contact);
