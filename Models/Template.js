@@ -1,3 +1,4 @@
+// 📁 models/Template.js
 const mongoose = require("mongoose");
 
 const templateSchema = mongoose.Schema(
@@ -5,17 +6,19 @@ const templateSchema = mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    content: {
-      type: String,
+      required: true,
     },
     name: {
       type: String,
+      required: true,
     },
+    content: {
+      type: String,
+      required: true,
+    },
+    variables: [String],
   },
   { timestamps: true }
 );
 
-const Template = mongoose.model("Template", templateSchema);
-
-module.exports = Template;
+module.exports = mongoose.model("Template", templateSchema);
