@@ -5,52 +5,67 @@ const EmailCampaign = require('../Models/EmailCampaign');
 const EmailCredential = require('../Models/EmailCredential');
 const { sendBulkMail } = require('../services/mail.service.js'); // Assuming you moved logic to service
 const Sent = require('../Models/Sent');
+const CryptoJS = require('crypto-js');
+const SECRET_KEY = process.env.EMAIL_ENCRYPTION_SECRET || "784e2ec8963a1e75d";
 
 exports.sendMails = async (req, res) => {
-  const { campaignId, selectedEmail } = req.body;
+    const { campaignId, selectedEmail } = req.body;
 
-  // 1. Fetch Campaign
-  const campaign = await EmailCampaign.findById(campaignId).populate('groupIds').populate('templateId');
-  if (!campaign) {
-    return res.status(404).json({ success: false, message: 'Campaign not found' });
-  }
+    // 1. Fetch Campaign
+    const campaign = await EmailCampaign.findById(campaignId).populate('groupIds').populate('templateId');
+    if (!campaign) {
+        return res.status(404).json({ success: false, message: 'Campaign not found' });
+    }
 
-  // 2. Get email credentials
-  const credential = await EmailCredential.findOne({ userId: req.user._id, email: selectedEmail });
-  if (!credential) {
-    return res.status(400).json({ success: false, message: "Email credential not found" });
-  }
+    const credential = await EmailCredential.findOne({ userId: req.user._id, email: selectedEmail });
+    if (!credential) {
+        return res.status(400).json({ success: false, message: "Email credential not found" });
+    }
 
-  // 3. Fetch all contacts in the campaign's groups
-  const contacts = await Contact.find({ groups: { $in: campaign.groupIds } });
+    // Decrypt the password
+    const bytes = CryptoJS.AES.decrypt(credential.password, SECRET_KEY);
+    const decryptedPassword = bytes.toString(CryptoJS.enc.Utf8);
+    credential.password = decryptedPassword; // Update the credential with decrypted password
+    // Now you can use decryptedPassword for sending emails
 
-  // 4. Get content (from template or raw body)
-  const templateContent = campaign.templateId ? campaign.templateId.content : campaign.body;
 
-  // 5. Send mails using customized template
-  const results = await sendBulkMail(contacts, campaign.subject, templateContent, credential);
+    // 3. Fetch all contacts in the campaign's groups
+    const contacts = await Contact.find({ groups: { $in: campaign.groupIds } });
 
-  const successCount = results.filter(r => r.success).length;
-  const failCount = results.length - successCount;
+    // 4. Get content (from template or raw body)
+    const templateContent = campaign.templateId ? campaign.templateId.content : campaign.body;
 
-  // 6. Log into "Sent"
-  await new Sent({
-    userId: req.user._id,
-    subject: campaign.subject,
-    groupId: campaign.groupIds[0], // log one group or handle multiple
-    message: campaign.templateId ? campaign.templateId.name : 'Custom message',
-    totalSent: successCount,
-    totalFailed: failCount,
-    details: results
-  }).save();
+    // 5. Send mails using customized template
+    const results = await sendBulkMail(contacts, campaign.subject, templateContent, credential);
 
-  // 7. Update Campaign Status
-  campaign.status = 'sent';
-  await campaign.save();
+    const successCount = results.filter(r => r.success).length;
+    const failCount = results.length - successCount;
 
-  res.status(200).json({
-    success: true,
-    message: `Emails sent. Success: ${successCount}, Failed: ${failCount}`,
-    details: results
-  });
+    await new Sent({
+        userId: req.user._id,
+        groupId: campaign.groupIds[0],
+        messageType: 'Email',
+        senderId: credential.email,
+        templateId: campaign.templateId?._id?.toString(),
+        content: campaign.templateId ? campaign.templateId.content : campaign.body,
+        status: failCount > 0 ? (successCount > 0 ? 'Partial' : 'Failed') : 'Sent',
+        additionalInfo: {
+            subject: campaign.subject,
+            totalSent: successCount.toString(),
+            totalFailed: failCount.toString(),
+            details: JSON.stringify(results)
+        }
+    }).save();
+
+
+
+    // 7. Update Campaign Status
+    campaign.status = 'sent';
+    await campaign.save();
+
+    res.status(200).json({
+        success: true,
+        message: `Emails sent. Success: ${successCount}, Failed: ${failCount}`,
+        details: results
+    });
 };
