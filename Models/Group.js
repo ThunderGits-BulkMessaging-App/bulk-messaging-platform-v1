@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Contact = require('./Contact.js'); // Assuming Contact model is in the same directory
 
 const groupSchema = new Schema({
   groupName: {

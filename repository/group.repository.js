@@ -1,12 +1,17 @@
 const Group = require('../Models/Group');
+const Contact = require('../Models/Contact'); // Adjust path as needed
+
 
 exports.create = (groupData) => {
     const group = new Group(groupData);
     return group.save();
 };
 
-exports.findAll = () => {
-    return Group.find();
+exports.findAll = (userId) => {
+    console.log("I've been called");
+
+    return Group.find()
+
 };
 
 exports.findById = (id) => {
@@ -24,5 +29,8 @@ exports.deleteById = (id) => {
 // repositories/groupRepository.js
 
 exports.findAllByUserId = (userId) => {
-    return Group.find({ createdBy: userId });
+    return Group.find({ createdBy: userId }).populate({
+        path: 'members',
+        select: 'firstName lastName phoneNumber email address' // Add fields you want
+    });
 };
