@@ -5,8 +5,10 @@ exports.createGroup = (groupData) => {
 };
 
 exports.getAllGroups = () => {
+    console.log("I've been called service");
     return groupRepository.findAll();
 };
+
 
 exports.getGroupById = (id) => {
     return groupRepository.findById(id);

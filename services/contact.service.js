@@ -6,17 +6,35 @@ const Group = require('../Models/Group.js'); // Ensure this is correctly require
 
 exports.createContact = async (contactData) => {
     let group;
+
     if (contactData.groupName) {
         group = await Group.findOne({ groupName: contactData.groupName });
+
         if (!group) {
             group = new Group({ groupName: contactData.groupName });
             await group.save();
         }
+
         contactData.groups = [group._id]; // Assign group id to the contact
     }
+
     delete contactData.groupName; // Remove groupName field if it exists
-    return contactRepository.create(contactData);
+
+    // Create the contact first
+    const newContact = await contactRepository.create(contactData);
+
+    // If group exists, add the contact to group's members
+    if (group) {
+        await Group.findByIdAndUpdate(
+            group._id,
+            { $addToSet: { members: newContact._id } }, // $addToSet prevents duplicates
+            { new: true }
+        );
+    }
+
+    return newContact;
 };
+
 
 exports.getAllContacts = () => {
     return contactRepository.findAll();
