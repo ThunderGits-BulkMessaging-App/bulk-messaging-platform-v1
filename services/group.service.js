@@ -24,6 +24,16 @@ exports.deleteGroupById = (id) => {
 
 // services/groupService.js
 
-exports.getAllGroupsByUser = (userId) => {
-    return groupRepository.findAllByUserId(userId);
+exports.getAllGroupsByUser = async (userId) => {
+    const groups = await groupRepository.findAllByUserId(userId);
+
+    // Add memberCount to each group
+    const updatedGroups = groups.map(group => {
+        const groupObj = group.toObject(); // Convert Mongoose document to plain object
+        groupObj.memberCount = group.members.length;
+        return groupObj;
+    });
+
+    return updatedGroups;
 };
+
