@@ -19,7 +19,7 @@ exports.getGroupById = async (id) => {
 
 
 
-    return updatedGroups;
+    return group;
 };
 
 exports.updateGroupById = (id, updateData) => {
