@@ -11,13 +11,13 @@ exports.getAllGroups = () => {
 
 
 exports.getGroupById = async (id) => {
-    const groups = await groupRepository.findById(id);
+    const group = await groupRepository.findById(id);
     // Add memberCount to each group
-    const updatedGroups = groups.map(group => {
-        const groupObj = group.toObject(); // Convert Mongoose document to plain object
-        groupObj.memberCount = group.members.length;
-        return groupObj;
-    });
+
+
+    group.memberCount = group.members.length;
+
+
 
     return updatedGroups;
 };
