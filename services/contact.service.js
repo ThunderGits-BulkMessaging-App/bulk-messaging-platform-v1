@@ -83,9 +83,9 @@ exports.parseContacts = (filePath, userId) => {
 
 async function processDataRow(data, userId) {
     if (data.groupName) {
-        let group = await Group.findOne({ name: data.groupName });
+        let group = await Group.findOne({ groupName: data.groupName });
         if (!group) {
-            group = new Group({ name: data.groupName });
+            group = new Group({ groupName: data.groupName });
             await group.save();
         }
         data.groups = [group._id];
