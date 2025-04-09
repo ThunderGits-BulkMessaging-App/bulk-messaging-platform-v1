@@ -37,8 +37,7 @@ const contactSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Group'
         }
-    ],
-    
+    ],    
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
