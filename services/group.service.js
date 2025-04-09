@@ -10,8 +10,16 @@ exports.getAllGroups = () => {
 };
 
 
-exports.getGroupById = (id) => {
-    return groupRepository.findById(id);
+exports.getGroupById = async (id) => {
+    const groups = await groupRepository.findById(id);
+    // Add memberCount to each group
+    const updatedGroups = groups.map(group => {
+        const groupObj = group.toObject(); // Convert Mongoose document to plain object
+        groupObj.memberCount = group.members.length;
+        return groupObj;
+    });
+
+    return updatedGroups;
 };
 
 exports.updateGroupById = (id, updateData) => {

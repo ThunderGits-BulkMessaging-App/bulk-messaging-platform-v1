@@ -15,7 +15,10 @@ exports.findAll = (userId) => {
 };
 
 exports.findById = (id) => {
-    return Group.findById(id);
+    return Group.findById(id).populate({
+        path: 'members',
+        select: 'firstName lastName phoneNumber email address' // Add fields you want
+    });;
 };
 
 exports.updateById = (id, updateData) => {
