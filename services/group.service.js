@@ -15,7 +15,7 @@ exports.getGroupById = async (id) => {
     // Add memberCount to each group
 
 
-    group.memberCount = group.members.length;
+    group["memberCount"] = group.members.length;
 
 
 
