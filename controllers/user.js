@@ -2,7 +2,7 @@ const Group = require("../Models/Group");
 const User = require("../Models/User");
 const Sent = require("../Models/Sent");
 const Template = require("../Models/Template");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { sendBulkMail } = require("../services/mail");
 const generateToken = require("../utils/generateToken");
 
