@@ -7,7 +7,7 @@ const groupSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    unique: true // Ensuring uniqueness of the group name
+    
   },
   description: {
     type: String,
@@ -32,6 +32,9 @@ const groupSchema = new Schema({
 }, {
   timestamps: { createdAt: 'creationDate', updatedAt: 'lastUpdated' }
 });
+
+// Compound index: unique name per user
+groupSchema.index({ name: 1, createdBy: 1 }, { unique: true });
 
 const Group = mongoose.model('Group', groupSchema);
 
