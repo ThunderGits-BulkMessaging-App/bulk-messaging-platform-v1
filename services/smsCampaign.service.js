@@ -44,7 +44,7 @@ exports.sendSMS = async (campaignId) => {
         // const template = credentials.messageTemplates.find(t => t.templateId === messageTemplateId);
         // if (!template) throw new Error('Message template not found in credentials');
 
-        const messageText = template.message;
+        // const messageText = template.message;
 
         // Step 3: Fetch contacts from groups
         const groupIds = groups.map(group => group._id);
