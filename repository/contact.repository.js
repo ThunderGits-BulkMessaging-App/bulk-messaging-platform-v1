@@ -5,8 +5,8 @@ exports.create = (contactData) => {
     return contact.save();
 };
 
-exports.findAll = () => {
-    return Contact.find().populate('groups');
+exports.findAll = (organisation) => {
+    return Contact.find({organisation}).populate('groups');
 };
 
 exports.update = (id, updateData) => {

@@ -5,8 +5,8 @@ exports.create = (credentialsData) => {
     return SMSCredentials.create(credentialsData);
 };
 
-exports.findAll = (userId) => {
-    return SMSCredentials.find({ userId: userId });
+exports.findAll = (organisation) => {
+    return SMSCredentials.find({ organisation });
 };
 
 exports.findById = (id) => {

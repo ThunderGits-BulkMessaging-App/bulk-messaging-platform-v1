@@ -36,8 +36,8 @@ exports.createContact = async (contactData) => {
 };
 
 
-exports.getAllContacts = () => {
-    return contactRepository.findAll();
+exports.getAllContacts = (organisation) => {
+    return contactRepository.findAll({organisation});
 };
 
 exports.updateContact = (id, updateData) => {

@@ -7,10 +7,10 @@ exports.create = (groupData) => {
     return group.save();
 };
 
-exports.findAll = (userId) => {
+exports.findAll = (organisation) => {
     console.log("I've been called");
 
-    return Group.find()
+    return Group.find({organisation})
 
 };
 

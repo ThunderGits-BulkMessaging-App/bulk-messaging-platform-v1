@@ -4,9 +4,9 @@ exports.createGroup = (groupData) => {
     return groupRepository.create(groupData);
 };
 
-exports.getAllGroups = () => {
+exports.getAllGroups = (organisation) => {
     console.log("I've been called service");
-    return groupRepository.findAll();
+    return groupRepository.findAll({organisation});
 };
 
 

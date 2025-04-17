@@ -4,7 +4,7 @@ const smsCredentialsService = require('../services/smsCredentials.service');
 exports.createSMSCredential = async (req, res) => {
     try {
         const userId = req.user.id; // Extracting userId from request object
-        const credentialData = { ...req.body, userId };
+        const credentialData = { ...req.body, organisation: req.user.organisation, }; // Include createdBy and organisation
         const credential = await smsCredentialsService.createSMSCredential(credentialData);
         res.status(201).json(credential);
     } catch (error) {
@@ -15,7 +15,7 @@ exports.createSMSCredential = async (req, res) => {
 exports.getAllSMSCredentials = async (req, res) => {
     try {
         const userId = req.user.id; // Extracting userId from request object
-        const credentials = await smsCredentialsService.getAllSMSCredentials(userId);
+        const credentials = await smsCredentialsService.getAllSMSCredentials(req.user.organisation);
         res.json(credentials);
     } catch (error) {
         res.status(500).json({ message: error.message });

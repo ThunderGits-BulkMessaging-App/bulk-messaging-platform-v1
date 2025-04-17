@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 const Contact = require('./Contact.js'); // Assuming Contact model is in the same directory
 
 const groupSchema = new Schema({
+  organisation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Organisation',
+    required: true
+  },
   groupName: {
     type: String,
     required: true,

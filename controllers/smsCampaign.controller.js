@@ -6,7 +6,7 @@ exports.createCampaign = async (req, res) => {
     try {
         const userId = req.user.id;
         const campaignData = req.body;
-        const campaign = await smsCampaignService.createCampaign(userId, campaignData);
+        const campaign = await smsCampaignService.createCampaignInOrganisation(req.user.organisation, campaignData);
         const sentSms = smsCampaignService.sendSMS(campaign._id);
         if (sentSms) {
             console.log(`SMS sent successfully for campaign ID: ${campaign._id}`);
@@ -22,7 +22,7 @@ exports.createCampaign = async (req, res) => {
 exports.getAllCampaigns = async (req, res) => {
     try {
         const userId = req.user.id;
-        const campaigns = await smsCampaignService.getAllCampaignsByUser(userId);
+        const campaigns = await smsCampaignService.getAllCampaigns(req.user.organisation);
         res.json(campaigns);
     } catch (error) {
         res.status(500).json({ message: error.message });

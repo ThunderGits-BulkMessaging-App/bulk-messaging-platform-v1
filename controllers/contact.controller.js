@@ -2,8 +2,9 @@ const contactService = require('../services/contact.service');
 
 exports.createContact = async (req, res) => {
     try {
-        console.log(req.body);
-        const contactData = { ...req.body, createdBy: req.user._id }; // Include createdBy
+        
+        const contactData = { ...req.body, createdBy: req.user._id,organisation:req.user.organisation }; // Include createdBy
+        console.log(contactData)
         const contact = await contactService.createContact(contactData);
         res.status(201).json(contact);
     } catch (error) {
@@ -13,7 +14,7 @@ exports.createContact = async (req, res) => {
 
 exports.getContacts = async (req, res) => {
     try {
-        const contacts = await contactService.getAllContacts();
+        const contacts = await contactService.getAllContacts(req.user.organisation);
         res.status(200).json(contacts);
     } catch (error) {
         res.status(500).json({ message: error.message });

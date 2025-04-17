@@ -5,8 +5,8 @@ exports.createSMSCredential = (credentialsData) => {
     return smsCredentialsRepository.create(credentialsData);
 };
 
-exports.getAllSMSCredentials = (userId) => {
-    return smsCredentialsRepository.findAll(userId);
+exports.getAllSMSCredentials = (organisation) => {
+    return smsCredentialsRepository.findAll(organisation);
 };
 
 exports.getSMSCredentialById = (id) => {

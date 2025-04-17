@@ -1,4 +1,5 @@
 // services/smsCampaign.service.js
+const SMSCampaign = require('../Models/Sms_Campaign');
 const smsCampaignRepository = require('../repository/smsCampaign.respository');
 const axios = require('axios');
 const SMSCampaign = require('../Models/Sms_Campaign');
@@ -93,4 +94,11 @@ exports.sendSMS = async (campaignId) => {
         });
         throw error;
     }
+};
+exports.getAllCampaigns = async(organisation) => {
+    return await SMSCampaign.find({ organisation });
+};
+
+exports.createCampaignInOrganisation =async (organisation, campaignData) => {
+    return await SMSCampaign.create({ ...campaignData, organisation });
 };

@@ -19,6 +19,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      enum: ["superAdmin","admin", "user"],
+      default: "user",
+    },
+    organisation: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organisation",
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

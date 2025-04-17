@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 
 const smsCredentialsSchema = new mongoose.Schema({
-    userId: {
+    organisation: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Organisation',
         required: true,
         unique: true // Ensuring each user has only one set of SMS credentials
     },
+  
     apiKey: {
         type: String,
         required: true

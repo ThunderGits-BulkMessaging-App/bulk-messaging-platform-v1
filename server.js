@@ -13,6 +13,8 @@ const emailCredentialsRoutes = require('./routes/emailCredential.routes.js');
 const emailCampaignRoutes = require('./routes/emailCampaign.routes.js');
 const templateRoutes = require('./routes/template.routes.js');
 const dashboardRoutes = require('./routes/dasboard.routes.js');
+const organisationRoutes = require('./routes/organisation.routes.js');
+
 require("dotenv").config();
 connectDB();
 app.use(express.json({ limit: "50mb" }));
@@ -34,6 +36,9 @@ app.use(`${process.env.BASEURL}`, emailCredentialsRoutes);
 app.use(`${process.env.BASEURL}`, emailCampaignRoutes);
 app.use(`${process.env.BASEURL}/templates`, templateRoutes);
 app.use(`${process.env.BASEURL}/dashboard`, dashboardRoutes);
+
+// super-admin 
+app.use(`${process.env.BASEURL}/organisations`, organisationRoutes);
 
 
 const port = process.env.PORT || 3100;

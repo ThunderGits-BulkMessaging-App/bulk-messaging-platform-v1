@@ -99,6 +99,7 @@ const login = async (req, res) => {
     return res
       .status(400)
       .send({ success: false, message: "Incorrect password or email" });
+      console.log(user.password, req.body.password);
   if (!bcrypt.compareSync(req.body.password, user.password))
     return res
       .status(400)
@@ -107,6 +108,7 @@ const login = async (req, res) => {
   res.status(200).send({
     success: true,
     message: "Successfully loggedIn",
+    data:user,
     token,
   });
 };
@@ -178,6 +180,15 @@ const dashboard = async (req, res) => {
     sents: sents.length,
   });
 };
+const authMe = async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  if (!user) return res.status(404).send({ success: false, message: "User not found" });
+  res.status(200).send({
+    data: user,
+    message: "User fetched successfully",
+    success: true,
+  });
+};
 
 module.exports = {
   addGroup,
@@ -191,4 +202,5 @@ module.exports = {
   deleteTemplate,
   viewTemplates,
   dashboard,
+  authMe
 };

@@ -2,7 +2,7 @@ const groupService = require('../services/group.service.js');
 
 exports.createGroup = async (req, res) => {
     try {
-        const groupData = { ...req.body, createdBy: req.user._id };
+        const groupData = { ...req.body, createdBy: req.user._id,organisation:req.user.organisation }; // Include createdBy and organisation
         const group = await groupService.createGroup(groupData);
         res.status(201).send(group);
     } catch (error) {
@@ -17,7 +17,7 @@ exports.createGroup = async (req, res) => {
 exports.getAllGroups = async (req, res) => {
     console.log("Fetching all groups");
     try {
-        const groups = await groupService.getAllGroupsByUser(req.user._id);               
+        const groups = await groupService.getAllGroups(req.user.organisation);               
         res.status(200).send(groups);
     } catch (error) {
         res.status(500).send(error.message);
