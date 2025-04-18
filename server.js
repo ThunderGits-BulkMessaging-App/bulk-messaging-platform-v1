@@ -14,6 +14,9 @@ const emailCampaignRoutes = require('./routes/emailCampaign.routes.js');
 const templateRoutes = require('./routes/template.routes.js');
 const dashboardRoutes = require('./routes/dasboard.routes.js');
 const organisationRoutes = require('./routes/organisation.routes.js');
+const offerPlanRoutes = require('./routes/offerPlanRouter.js');
+const subscriptionRoutes = require('./routes/subscriptionRouter.js');
+const paymentRoutes = require('./routes/paymentRouter.js');
 
 require("dotenv").config();
 connectDB();
@@ -39,7 +42,11 @@ app.use(`${process.env.BASEURL}/dashboard`, dashboardRoutes);
 
 // super-admin 
 app.use(`${process.env.BASEURL}/organisations`, organisationRoutes);
+app.use(`${process.env.BASEURL}/subscription`, subscriptionRoutes);
+app.use(`${process.env.BASEURL}/payment`, paymentRoutes);
 
+// open api
+app.use(`${process.env.BASEURL}/offers-plan`,async(req,res,next)=>{console.log("offer plan route"); next()}, offerPlanRoutes);
 
 const port = process.env.PORT || 3100;
 app.listen(port, () => console.log(`listening on port ${port}`));

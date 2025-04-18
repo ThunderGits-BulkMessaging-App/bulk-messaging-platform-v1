@@ -18,7 +18,6 @@ const contactSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        unique: true, // Consider whether you still want this unique if it's not required
         trim: true,
         sparse: true // This allows for null values in a unique field
     },
@@ -48,6 +47,8 @@ const contactSchema = new mongoose.Schema({
         ref: 'User'
     }
 });
+
+contactSchema.index({ organisation: 1, phoneNumber: 1 }, { unique: true });
 
 const Contact = mongoose.model('Contact', contactSchema);
 

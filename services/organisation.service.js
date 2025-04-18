@@ -1,4 +1,6 @@
+const offerPlanModel = require("../models/offerPlanModel");
 const Organisation = require("../Models/Organisation");
+const Subscription = require("../Models/subscriptionModel");
 const User = require("../Models/User");
 
 
@@ -27,6 +29,33 @@ exports.createOrganisation = async (data, userId) => {
         organisation: organisation._id,
       });
       await adminUser.save({ session });
+
+      const defaultPlan=await offerPlanModel.findOne({name:'free_trial'});
+    
+    console.log(defaultPlan)
+    if (!defaultPlan) {
+      throw new Error('Default plan not found');
+    }
+
+    // Fix date calculation
+const startDate = new Date();
+const endDate = new Date(startDate);
+endDate.setDate(endDate.getDate() + defaultPlan.validityInDays);
+    await Subscription.create(
+      [{
+        organisation: organisation._id,
+        offerPlanId: defaultPlan._id,
+        plan: defaultPlan.name,
+        price: defaultPlan.price,
+        startDate: new Date(),
+        endDate: endDate,
+        isActive: true,
+        isCancelled: false,
+        paymentMethod: 'wallet',
+        transactionId: 'xxxxxxxxxxxxxx',
+      }],
+      { session }
+    );
   
       await session.commitTransaction();
       session.endSession();

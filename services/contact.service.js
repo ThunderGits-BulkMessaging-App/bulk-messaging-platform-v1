@@ -11,7 +11,7 @@ exports.createContact = async (contactData) => {
         group = await Group.findOne({ groupName: contactData.groupName });
 
         if (!group) {
-            group = new Group({ groupName: contactData.groupName });
+            group = new Group({organisation:contactData.organisation, groupName: contactData.groupName });
             await group.save();
         }
 
@@ -36,8 +36,8 @@ exports.createContact = async (contactData) => {
 };
 
 
-exports.getAllContacts = (organisation) => {
-    return contactRepository.findAll({organisation});
+exports.getAllContacts = async(organisation) => {
+    return await contactRepository.findAll(organisation);
 };
 
 exports.updateContact = (id, updateData) => {

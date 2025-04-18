@@ -3,22 +3,23 @@ const router = express.Router();
 const groupController = require('../controllers/group.controller.js');
 const { protect } = require('../middlewares/auth.js');
 
+
 // Applying 'protect' middleware to all group routes
-router.use(protect)
+
 
 // Create a new group
-router.post('/', groupController.createGroup);
+router.post('/',protect, groupController.createGroup);
 
 // Retrieve all groups
-router.get('/', groupController.getAllGroups);
+router.get('/',protect, groupController.getAllGroups);
 
 // Retrieve a single group by id
-router.get('/:id', groupController.getGroupById);
+router.get('/:id',protect, groupController.getGroupById);
 
 // Update a group by id
-router.put('/:id', groupController.updateGroupById);
+router.put('/:id',protect, groupController.updateGroupById);
 
 // Delete a group by id
-router.delete('/:id', groupController.deleteGroupById);
+router.delete('/:id',protect, groupController.deleteGroupById);
 
 module.exports = router;
