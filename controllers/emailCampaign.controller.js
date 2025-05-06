@@ -9,7 +9,7 @@ exports.create = async (req, res, next) => {
     // Automatically send emails after creation
     const result = await sendMails({
       campaignId: campaign._id,
-      userId,
+      userId:req.user.id,
       selectedEmail: req.body.selectedEmail
     });
     res.status(201).json({
