@@ -8,7 +8,7 @@ const Sent = require('../Models/Sent');
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.EMAIL_ENCRYPTION_SECRET || "784e2ec8963a1e75d";
 
-exports.sendMails = async ({ campaignId, userId, selectedEmail }) => {
+exports.sendMails = async ({ campaignId, userId, }) => {
 
 
     // 1. Fetch Campaign
@@ -17,7 +17,7 @@ exports.sendMails = async ({ campaignId, userId, selectedEmail }) => {
         return { success: false, message: 'Campaign not found' };
     }
 
-    const credential = await EmailCredential.findOne({ userId: userId, email: selectedEmail });
+    const credential = await EmailCredential.findOne({ userId: userId});
     if (!credential) {
         return { success: false, message: "Email credential not found" };
     }
