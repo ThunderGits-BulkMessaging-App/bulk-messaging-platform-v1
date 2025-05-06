@@ -10,7 +10,7 @@ exports.create = async (req, res, next) => {
     const result = await sendMails({
       campaignId: campaign._id,
       userId:req.user.id,
-      selectedEmail: req.body.selectedEmail
+      
     });
     res.status(201).json({
       success: true,
