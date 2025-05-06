@@ -8,8 +8,8 @@ const Sent = require('../Models/Sent');
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.EMAIL_ENCRYPTION_SECRET || "784e2ec8963a1e75d";
 
-exports.sendMails = async (req, res) => {
-    const { campaignId, selectedEmail } = req.body;
+exports.sendMails = async ({ campaignId, userId, selectedEmail }) => {
+
 
     // 1. Fetch Campaign
     const campaign = await EmailCampaign.findById(campaignId).populate('groupIds').populate('templateId');
@@ -17,7 +17,7 @@ exports.sendMails = async (req, res) => {
         return res.status(404).json({ success: false, message: 'Campaign not found' });
     }
 
-    const credential = await EmailCredential.findOne({ userId: req.user._id, email: selectedEmail });
+    const credential = await EmailCredential.findOne({ userId: userId, email: selectedEmail });
     if (!credential) {
         return res.status(400).json({ success: false, message: "Email credential not found" });
     }
@@ -42,7 +42,7 @@ exports.sendMails = async (req, res) => {
     const failCount = results.length - successCount;
 
     await new Sent({
-        userId: req.user._id,
+        userId: userId,
         groupId: campaign.groupIds[0],
         messageType: 'Email',
         senderId: credential.email,
@@ -63,9 +63,9 @@ exports.sendMails = async (req, res) => {
     campaign.status = 'sent';
     await campaign.save();
 
-    res.status(200).json({
-        success: true,
-        message: `Emails sent. Success: ${successCount}, Failed: ${failCount}`,
-        details: results
-    });
+    return {
+        successCount,
+        failCount,
+        results
+    };
 };
