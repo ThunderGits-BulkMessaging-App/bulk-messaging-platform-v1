@@ -14,12 +14,12 @@ exports.sendMails = async ({ campaignId, userId, selectedEmail }) => {
     // 1. Fetch Campaign
     const campaign = await EmailCampaign.findById(campaignId).populate('groupIds').populate('templateId');
     if (!campaign) {
-        return res.status(404).json({ success: false, message: 'Campaign not found' });
+        return { success: false, message: 'Campaign not found' };
     }
 
     const credential = await EmailCredential.findOne({ userId: userId, email: selectedEmail });
     if (!credential) {
-        return res.status(400).json({ success: false, message: "Email credential not found" });
+        return { success: false, message: "Email credential not found" };
     }
 
     // Decrypt the password
