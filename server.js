@@ -17,6 +17,7 @@ const organisationRoutes = require('./routes/organisation.routes.js');
 const offerPlanRoutes = require('./routes/offerPlanRouter.js');
 const subscriptionRoutes = require('./routes/subscriptionRouter.js');
 const paymentRoutes = require('./routes/paymentRouter.js');
+const inquiriesRoutes = require('./routes/inquiryRouter.js');
 
 require("dotenv").config();
 connectDB();
@@ -44,6 +45,7 @@ app.use(`${process.env.BASEURL}/dashboard`, dashboardRoutes);
 app.use(`${process.env.BASEURL}/organisations`, organisationRoutes);
 app.use(`${process.env.BASEURL}/subscription`, subscriptionRoutes);
 app.use(`${process.env.BASEURL}/payment`, paymentRoutes);
+app.use(`${process.env.BASEURL}/inquiries`, inquiriesRoutes);
 
 // open api
 app.use(`${process.env.BASEURL}/offers-plan`,async(req,res,next)=>{console.log("offer plan route"); next()}, offerPlanRoutes);

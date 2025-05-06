@@ -2,7 +2,6 @@
 const SMSCampaign = require('../Models/Sms_Campaign');
 const smsCampaignRepository = require('../repository/smsCampaign.respository');
 const axios = require('axios');
-const SMSCampaign = require('../Models/Sms_Campaign');
 const Group = require('../Models/Group');
 const Contact = require('../Models/Contact');
 const SMSCredentials = require('../Models/Sms_Credentials');
