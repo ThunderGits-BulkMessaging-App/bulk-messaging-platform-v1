@@ -34,7 +34,7 @@ const groupSchema = new Schema({
 });
 
 // Compound index: unique name per user
-groupSchema.index({ name: 1, createdBy: 1 }, { unique: true });
+groupSchema.index({ groupName: 1, createdBy: 1 }, { unique: true });
 
 const Group = mongoose.model('Group', groupSchema);
 
