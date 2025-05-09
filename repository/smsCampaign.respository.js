@@ -10,7 +10,7 @@ exports.findCampaignById = (id) => {
 };
 
 exports.findAllCampaignsByUser = (userId) => {
-    return SMSCampaign.find({ userId });
+    return SMSCampaign.find({ userId }).populate('groups');
 };
 
 exports.updateCampaignById = (id, updateData) => {
