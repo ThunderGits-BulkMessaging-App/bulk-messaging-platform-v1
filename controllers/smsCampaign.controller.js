@@ -13,7 +13,7 @@ exports.createCampaign = async (req, res) => {
         } else {
             console.log(`Failed to send SMS for campaign ID: ${campaign._id}`);
         }
-        res.status(201).json({ success: true, message: 'SMS sending initiated', data: result, campaign });
+        res.status(201).json({ success: true, message: 'SMS sending initiated', data: sentSms, campaign });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

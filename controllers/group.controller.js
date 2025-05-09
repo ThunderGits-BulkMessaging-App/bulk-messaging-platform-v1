@@ -2,10 +2,12 @@ const groupService = require('../services/group.service.js');
 
 exports.createGroup = async (req, res) => {
     try {
+        console.log(req.user )
         const groupData = { ...req.body, createdBy: req.user._id };
         const group = await groupService.createGroup(groupData);
         res.status(201).send(group);
     } catch (error) {
+        console.log(error)
         if (error.code === 11000) { // MongoDB duplicate key error code
             res.status(409).send({ message: 'A group with the same name already exists.' });
         } else {

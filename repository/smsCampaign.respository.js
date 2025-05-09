@@ -6,7 +6,7 @@ exports.createCampaign = (campaignData) => {
 };
 
 exports.findCampaignById = (id) => {
-    return SMSCampaign.findById(id);
+    return SMSCampaign.findById(id).populate('groups');
 };
 
 exports.findAllCampaignsByUser = (userId) => {

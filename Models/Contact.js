@@ -13,9 +13,7 @@ const contactSchema = new mongoose.Schema({
     },
     phoneNumber: {
         type: String,
-        unique: true, // Consider whether you still want this unique if it's not required
         trim: true,
-        sparse: true // This allows for null values in a unique field
     },
     email: {
         type: String,
