@@ -6,11 +6,11 @@ exports.createCampaign = (campaignData) => {
 };
 
 exports.findCampaignById = (id) => {
-    return SMSCampaign.findById(id);
+    return SMSCampaign.findById(id).populate('groups');
 };
 
 exports.findAllCampaignsByUser = (userId) => {
-    return SMSCampaign.find({ userId });
+    return SMSCampaign.find({ userId }).populate('groups');
 };
 
 exports.updateCampaignById = (id, updateData) => {

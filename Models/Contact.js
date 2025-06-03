@@ -19,7 +19,6 @@ const contactSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
         trim: true,
-        sparse: true // This allows for null values in a unique field
     },
     email: {
         type: String,

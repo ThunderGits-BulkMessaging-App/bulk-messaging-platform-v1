@@ -8,11 +8,16 @@ exports.createContact = async (contactData) => {
     let group;
 
     if (contactData.groupName) {
-        group = await Group.findOne({ groupName: contactData.groupName });
+        group = await Group.findOne({ groupName: contactData.groupName }).populate("members");
 
         if (!group) {
             group = new Group({organisation:contactData.organisation, groupName: contactData.groupName });
             await group.save();
+        }
+        
+        const numberExistInGrp=group.members.some(item=>String(item.phoneNumber)===String(contactData.phoneNumber))
+        if(numberExistInGrp){
+            throw new Error("Number already added in this group")
         }
 
         contactData.groups = [group._id]; // Assign group id to the contact
