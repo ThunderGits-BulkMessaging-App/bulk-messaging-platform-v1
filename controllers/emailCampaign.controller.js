@@ -12,7 +12,7 @@ exports.create = async (req, res, next) => {
       userId:req.user.id,
       
     });
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: 'Email campaign created and emails sent',
       campaign,
@@ -22,7 +22,9 @@ exports.create = async (req, res, next) => {
       },
       details: result.results
     });
+    console.log("first")
   } catch (err) {
+    console.log(err)
     next(err);
   }
 };

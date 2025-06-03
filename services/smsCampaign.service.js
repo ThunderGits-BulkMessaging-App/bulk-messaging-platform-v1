@@ -16,7 +16,7 @@ exports.getCampaignById = (id) => {
 };
 
 exports.getAllCampaignsByUser = (userId) => {
-    return smsCampaignRepository.findAllCampaignsByUser(userId);
+    return smsCampaignRepository.findAllCampaignsByUser(userId).sort({createdAt:-1});
 };
 
 exports.updateCampaign = (id, campaignData) => {
