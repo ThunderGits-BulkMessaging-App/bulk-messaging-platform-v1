@@ -44,6 +44,12 @@ exports.getCampaignById = async (req, res) => {
 exports.updateCampaign = async (req, res) => {
     try {
         const updatedCampaign = await smsCampaignService.updateCampaign(req.params.id, req.body);
+        const sentSms = smsCampaignService.sendSMS(req.params.id);
+        if (sentSms) {
+            console.log(`SMS sent successfully for campaign ID: ${req.params.id}`);
+        } else {
+            console.log(`Failed to send SMS for campaign ID: ${req.params.id}`);
+        }
         res.json(updatedCampaign);
     } catch (error) {
         res.status(500).json({ message: error.message });

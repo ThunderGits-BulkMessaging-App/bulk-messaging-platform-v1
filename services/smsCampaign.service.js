@@ -16,7 +16,7 @@ exports.getCampaignById = (id) => {
 };
 
 exports.getAllCampaignsByUser = (userId) => {
-    return smsCampaignRepository.findAllCampaignsByUser(userId).sort({createdAt:-1});
+    return smsCampaignRepository.findAllCampaignsByUser(userId).sort({ createdAt: -1 });
 };
 
 exports.updateCampaign = (id, campaignData) => {
@@ -32,10 +32,10 @@ exports.sendSMS = async (campaignId) => {
         const campaign = await SMSCampaign.findById(campaignId).populate('groups');
         if (!campaign) throw new Error('Campaign not found');
 
-        const { userId, senderId, messageTemplateId, groups } = campaign;
+        const { organisation, senderId, messageTemplateId, groups } = campaign;
 
         // Step 1: Get SMS Credentials
-        const credentials = await SMSCredentials.findOne({ userId });
+        const credentials = await SMSCredentials.findOne({ organisation });
         if (!credentials) throw new Error('SMS credentials not found for user');
 
         const apiKey = credentials.apiKey;
@@ -94,10 +94,10 @@ exports.sendSMS = async (campaignId) => {
         throw error;
     }
 };
-exports.getAllCampaigns = async(organisation) => {
+exports.getAllCampaigns = async (organisation) => {
     return await SMSCampaign.find({ organisation });
 };
 
-exports.createCampaignInOrganisation =async (organisation, campaignData) => {
+exports.createCampaignInOrganisation = async (organisation, campaignData) => {
     return await SMSCampaign.create({ ...campaignData, organisation });
 };

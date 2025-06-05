@@ -9,8 +9,8 @@ const stripPassword = (credential) => {
     return safe;
 }
 
-exports.createCredential = async (userId, data) => {
-    const existing = await repo.findByUserIdAndEmail(userId, data.email);
+exports.createCredential = async (organisationId, data) => {
+    const existing = await repo.findByUserIdAndEmail(organisationId, data.email);
     if (existing) {
         const error = new Error("You already have credentials saved for this email.");
         error.status = 400;
@@ -18,26 +18,26 @@ exports.createCredential = async (userId, data) => {
     }
 
     const encryptedPassword = CryptoJS.AES.encrypt(data.password, SECRET_KEY).toString();
-    const credential = await repo.create({ ...data, userId, password: encryptedPassword });
+    const credential = await repo.create({ ...data, organisation: organisationId, password: encryptedPassword });
     return stripPassword(credential);
 };
 
 
-exports.getCredentialsByUser = async (userId) => {
-    const creds = await repo.findByUserId(userId);
+exports.getCredentialsByUser = async (organisationId) => {
+    const creds = await repo.findByOrganisationId(organisationId);
     return creds.map(stripPassword);
 };
 
-exports.updateCredential = async (id, data, userId) => {
+exports.updateCredential = async (id, data, organisationId) => {
     const credential = await repo.findById(id);
-    if (!credential || credential.userId.toString() !== userId.toString()) return null;
+    if (!credential || credential.organisation.toString() !== organisationId.toString()) return null;
     const encryptedPassword = CryptoJS.AES.encrypt(data.password, SECRET_KEY).toString();
-    let updatedData = await repo.update(id, {...data, password: encryptedPassword});   
+    let updatedData = await repo.update(id, { ...data, password: encryptedPassword });
     return stripPassword(updatedData);
 };
 
-exports.deleteCredential = async (id, userId) => {
+exports.deleteCredential = async (id, organisationId) => {
     const credential = await repo.findById(id);
-    if (!credential || credential.userId.toString() !== userId.toString()) return null;
+    if (!credential || credential.organisation.toString() !== organisationId.toString()) return null;
     return repo.remove(id);
 };

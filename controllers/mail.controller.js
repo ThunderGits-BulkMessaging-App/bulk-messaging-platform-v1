@@ -8,7 +8,7 @@ const Sent = require('../Models/Sent');
 const CryptoJS = require('crypto-js');
 const SECRET_KEY = process.env.EMAIL_ENCRYPTION_SECRET || "784e2ec8963a1e75d";
 
-exports.sendMails = async ({ campaignId, userId, }) => {
+exports.sendMails = async ({ campaignId, organisationId, }) => {
 
 
     // 1. Fetch Campaign
@@ -17,7 +17,7 @@ exports.sendMails = async ({ campaignId, userId, }) => {
         return { success: false, message: 'Campaign not found' };
     }
 
-    const credential = await EmailCredential.findOne({ userId: userId});
+    const credential = await EmailCredential.findOne({ organisation: organisationId });
     if (!credential) {
         return { success: false, message: "Email credential not found" };
     }
@@ -35,14 +35,16 @@ exports.sendMails = async ({ campaignId, userId, }) => {
     // 4. Get content (from template or raw body)
     const templateContent = campaign.templateId ? campaign.templateId.content : campaign.body;
 
+    credential.useSendGrid = true
     // 5. Send mails using customized template
     const results = await sendBulkMail(contacts, campaign.subject, templateContent, credential);
+    console.log(results)
 
     const successCount = results.filter(r => r.success).length;
     const failCount = results.length - successCount;
 
     await new Sent({
-        userId: userId,
+        organisation: organisationId,
         groupId: campaign.groupIds[0],
         messageType: 'Email',
         senderId: credential.email,

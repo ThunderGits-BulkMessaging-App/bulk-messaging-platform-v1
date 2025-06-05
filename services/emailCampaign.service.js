@@ -2,17 +2,17 @@
 // 📁 services/emailCampaign.service.js
 const repo = require('../repository/emailCampaign.repository');
 
-exports.createEmailCampaign = (userId, data) => {   
-  return repo.create({ ...data, userId });
+exports.createEmailCampaign = (organisationId, data) => {
+  return repo.create({ ...data, organisation: organisationId });
 };
 
-exports.getUserEmailCampaigns = (userId, status, page = 1, limit = 10) => {
-  return repo.findByUserId(userId, status, page, limit);
+exports.getUserEmailCampaigns = (organisationId, status, page = 1, limit = 10) => {
+  return repo.findByOrganisationId(organisationId, status, page, limit);
 };
 
-exports.getEmailCampaignById = async (userId, id) => {
+exports.getEmailCampaignById = async (organisationId, id) => {
   const campaign = await repo.findById(id);
-  if (!campaign || campaign.userId.toString() !== userId) {
+  if (!campaign || campaign.organisation.toString() !== organisationId) {
     const err = new Error('Email campaign not found or unauthorized');
     err.status = 404;
     throw err;
@@ -20,13 +20,13 @@ exports.getEmailCampaignById = async (userId, id) => {
   return campaign;
 };
 
-exports.getEmailCampaignsByStatus = (userId, status) => {
-  return repo.findByStatus(userId, status);
+exports.getEmailCampaignsByStatus = (organisationId, status) => {
+  return repo.findByStatus(organisationId, status);
 };
 
-exports.updateEmailCampaign = async (userId, id, data) => {
+exports.updateEmailCampaign = async (organisationId, id, data) => {
   const campaign = await repo.findById(id);
-  if (!campaign || campaign.userId.toString() !== userId) {
+  if (!campaign || campaign.organisation.toString() !== organisationId) {
     const err = new Error('Email campaign not found or unauthorized');
     err.status = 404;
     throw err;
@@ -34,9 +34,9 @@ exports.updateEmailCampaign = async (userId, id, data) => {
   return repo.update(id, data);
 };
 
-exports.deleteEmailCampaign = async (userId, id) => {
+exports.deleteEmailCampaign = async (organisationId, id) => {
   const campaign = await repo.findById(id);
-  if (!campaign || campaign.userId.toString() !== userId) {
+  if (!campaign || campaign.organisation.toString() !== organisationId) {
     const err = new Error('Email campaign not found or unauthorized');
     err.status = 404;
     throw err;

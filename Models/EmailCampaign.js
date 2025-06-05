@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 const emailCampaignSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  organisation: { type: mongoose.Schema.Types.ObjectId, ref: 'Organisation', required: true },
   name: { type: String, required: true },
   subject: { type: String, required: true },
   groupIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],

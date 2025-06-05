@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const emailCredentialSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  organisation: { type: mongoose.Schema.Types.ObjectId, ref: "Organisation", required: true },
   service: { type: String, default: "Gmail" },
   email: { type: String, required: true },
   password: { type: String, required: true } // Consider encryption later

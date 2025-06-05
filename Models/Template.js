@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 
 const templateSchema = mongoose.Schema(
   {
-    userId: {
+    organisation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Organisation",
       required: true,
     },
     name: {

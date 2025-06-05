@@ -9,14 +9,14 @@ exports.createContact = async (contactData) => {
 
     if (contactData.groupName) {
         group = await Group.findOne({ groupName: contactData.groupName }).populate("members");
-
+        console.log(group)
         if (!group) {
-            group = new Group({organisation:contactData.organisation, groupName: contactData.groupName });
+            group = new Group({ organisation: contactData.organisation, groupName: contactData.groupName });
             await group.save();
         }
-        
-        const numberExistInGrp=group.members.some(item=>String(item.phoneNumber)===String(contactData.phoneNumber))
-        if(numberExistInGrp){
+
+        const numberExistInGrp = group.members.some(item => String(item.phoneNumber) === String(contactData.phoneNumber))
+        if (numberExistInGrp) {
             throw new Error("Number already added in this group")
         }
 
@@ -41,7 +41,7 @@ exports.createContact = async (contactData) => {
 };
 
 
-exports.getAllContacts = async(organisation) => {
+exports.getAllContacts = async (organisation) => {
     return await contactRepository.findAll(organisation);
 };
 

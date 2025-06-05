@@ -22,7 +22,7 @@ exports.createOrganisation = async (req, res) => {
 // READ ALL
 exports.getAllOrganisations = async (req, res) => {
   try {
-    const organisations = await getAllOrganisations();
+    const organisations = (await getAllOrganisations());
     res.status(200).json({
       success: true,
       message: 'Organisations fetched successfully',

@@ -2,7 +2,7 @@ const EmailCredential = require('../Models/EmailCredential.js');
 
 exports.create = (data) => EmailCredential.create(data);
 
-exports.findByUserId = (userId) => EmailCredential.find({ userId });
+exports.findByOrganisationId = (organisationId) => EmailCredential.find({ organisation: organisationId });
 
 exports.findById = (id) => EmailCredential.findById(id);
 
@@ -10,5 +10,5 @@ exports.update = (id, data) => EmailCredential.findByIdAndUpdate(id, data, { new
 
 exports.remove = (id) => EmailCredential.findByIdAndDelete(id);
 
-exports.findByUserIdAndEmail = (userId, email) => EmailCredential.findOne({ userId, email });
+exports.findByUserIdAndEmail = (organisationId, email) => EmailCredential.findOne({ organisation: organisationId, email });
 

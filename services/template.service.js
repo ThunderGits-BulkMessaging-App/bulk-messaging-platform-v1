@@ -2,18 +2,19 @@
 const repo = require('../repository/template.repository');
 const { extractVariables, renderTemplate } = require('../utils/templateRenderer');
 
-exports.createTemplate = async (userId, data) => {
+exports.createTemplate = async (organisationId, data) => {
   const variables = extractVariables(data.content);
-  return repo.create({ ...data, userId, variables });
+  return repo.create({ ...data, organisation: organisationId, variables });
 };
 
-exports.getUserTemplates = (userId) => {
-  return repo.findByUserId(userId);
+exports.getUserTemplates = (organisationId) => {
+  return repo.findByOrganisationId(organisationId);
 };
 
-exports.getTemplateById = async (userId, id) => {
+exports.getTemplateById = async (organisationId, id) => {
+  console.log(organisationId, id)
   const template = await repo.findById(id);
-  if (!template || template.userId.toString() !== userId) {
+  if (!template || template.organisation.toString() !== organisationId.toString()) {
     const err = new Error('Template not found or unauthorized');
     err.status = 404;
     throw err;
@@ -21,9 +22,9 @@ exports.getTemplateById = async (userId, id) => {
   return template;
 };
 
-exports.updateTemplate = async (userId, id, data) => {
+exports.updateTemplate = async (organisationId, id, data) => {
   const template = await repo.findById(id);
-  if (!template || template.userId.toString() !== userId) {
+  if (!template || template.organisation.toString() !== organisationId.toString()) {
     const err = new Error('Template not found or unauthorized');
     err.status = 404;
     throw err;
@@ -32,9 +33,9 @@ exports.updateTemplate = async (userId, id, data) => {
   return repo.update(id, { ...data, variables });
 };
 
-exports.deleteTemplate = async (userId, id) => {
+exports.deleteTemplate = async (organisationId, id) => {
   const template = await repo.findById(id);
-  if (!template || template.userId.toString() !== userId) {
+  if (!template || template.organisation.toString() !== organisationId.toString()) {
     const err = new Error('Template not found or unauthorized');
     err.status = 404;
     throw err;
@@ -42,7 +43,7 @@ exports.deleteTemplate = async (userId, id) => {
   return repo.remove(id);
 };
 
-exports.renderTemplateWithVariables = async (userId, id, variables) => {
-  const template = await exports.getTemplateById(userId, id);
+exports.renderTemplateWithVariables = async (organisationId, id, variables) => {
+  const template = await exports.getTemplateById(organisationId, id);
   return renderTemplate(template.content, variables);
 };

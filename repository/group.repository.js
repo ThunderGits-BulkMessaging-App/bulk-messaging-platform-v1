@@ -10,7 +10,7 @@ exports.create = (groupData) => {
 exports.findAll = (organisation) => {
     console.log("I've been called");
 
-    return Group.find({organisation})
+    return Group.find({ organisation }).populate('members')
 
 };
 

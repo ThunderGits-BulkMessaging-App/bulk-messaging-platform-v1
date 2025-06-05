@@ -5,42 +5,42 @@ const User = require("../Models/User");
 
 
 exports.createOrganisation = async (data, userId) => {
-    const session = await Organisation.startSession();
-    session.startTransaction();
-  
-    try {
-      const { email, ...orgData } = data;
-  
-      // Step 1: Create Organisation
-      const organisation = new Organisation({ ...orgData, email, createdBy: userId });
-      await organisation.save({ session });
-  
-      // Step 2: Generate random password
-      const randomPassword =  "adminBhai" //crypto.randomBytes(8).toString('hex'); // 16 char random
-     
-  
-      // Step 3: Create Admin User
-      const adminUser = new User({
-        firstName: organisation.name,
-        lastName: 'last',
-        email,
-        password: randomPassword,
-        role: 'admin',
-        organisation: organisation._id,
-      });
-      await adminUser.save({ session });
+  const session = await Organisation.startSession();
+  session.startTransaction();
 
-      const defaultPlan=await offerPlanModel.findOne({name:'free_trial'});
-    
+  try {
+    const { email, ...orgData } = data;
+
+    // Step 1: Create Organisation
+    const organisation = new Organisation({ ...orgData, email, createdBy: userId });
+    await organisation.save({ session });
+
+    // Step 2: Generate random password
+    const randomPassword = "adminBhai" //crypto.randomBytes(8).toString('hex'); // 16 char random
+
+
+    // Step 3: Create Admin User
+    const adminUser = new User({
+      firstName: organisation.name,
+      lastName: 'last',
+      email,
+      password: randomPassword,
+      role: 'admin',
+      organisation: organisation._id,
+    });
+    await adminUser.save({ session });
+
+    const defaultPlan = await offerPlanModel.findOne({ name: 'free_trial' });
+
     console.log(defaultPlan)
     if (!defaultPlan) {
       throw new Error('Default plan not found');
     }
 
     // Fix date calculation
-const startDate = new Date();
-const endDate = new Date(startDate);
-endDate.setDate(endDate.getDate() + defaultPlan.validityInDays);
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + defaultPlan.validityInDays);
     await Subscription.create(
       [{
         organisation: organisation._id,
@@ -56,26 +56,26 @@ endDate.setDate(endDate.getDate() + defaultPlan.validityInDays);
       }],
       { session }
     );
-  
-      await session.commitTransaction();
-      session.endSession();
-  
-      return {
-        organisation,
-        adminUser: {
-          email: adminUser.email,
-          password: randomPassword, // send plaintext only once (e.g., via email)
-        },
-      };
-    } catch (error) {
-      await session.abortTransaction();
-      session.endSession();
-      throw error;
-    }
-  };
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return {
+      organisation,
+      adminUser: {
+        email: adminUser.email,
+        password: randomPassword, // send plaintext only once (e.g., via email)
+      },
+    };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    throw error;
+  }
+};
 
 exports.getAllOrganisations = async () => {
-  return await Organisation.find();
+  return await Organisation.find().sort({ createdAt: -1 });
 };
 
 exports.getOrganisationById = async (id) => {
