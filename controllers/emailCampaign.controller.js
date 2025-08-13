@@ -7,6 +7,7 @@ exports.create = async (req, res, next) => {
 
     const campaign = await service.createEmailCampaign(req.user.organisation, req.body);
     // Automatically send emails after creation
+    console.log("in campaign create controller")
     const result = await sendMails({
       campaignId: campaign._id,
       organisationId: req.user.organisation,

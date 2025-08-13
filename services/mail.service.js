@@ -1,6 +1,14 @@
 const sgMail = require('@sendgrid/mail');
 const nodemailer = require('nodemailer');
 
+
+// we have to add key in email credential model
+// SENDGRID_API_KEY and name
+
+
+
+
+
 // Set SendGrid API key globally
 if (process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -12,9 +20,8 @@ if (process.env.SENDGRID_API_KEY) {
 exports.sendBulkMail = async (contacts, subject, template, credential) => {
     const results = [];
 
-    // Optional: Create nodemailer transporter only if needed
     let transporter = null;
-    if (!credential.useSendGrid) {
+    if (credential.service !== 'sendgrid') {
         // ✅ Create a Nodemailer transporter with SMTP
         transporter = nodemailer.createTransport({
             host: credential.host || "smtp.gmail.com",
@@ -25,6 +32,8 @@ exports.sendBulkMail = async (contacts, subject, template, credential) => {
                 pass: credential.password,
             },
         });
+    } else {
+        sgMail.setApiKey(credential.sendGridApiKey);
     }
 
     // Loop through contacts and send personalized emails
@@ -38,14 +47,18 @@ exports.sendBulkMail = async (contacts, subject, template, credential) => {
 
         // Prepare common fields
         const toEmail = contact.email;
-        const fromEmail = credential.from || "no-reply@thundergts.com";
+        const fromEmail = credential.email || "no-reply@thundergts.com";
+        const fromName = credential.fromName || "Thunder GTS";
 
         try {
-            if (credential.useSendGrid) {
+            if (credential.service === 'sendgrid') {
                 // ✅ Send using SendGrid
                 const msg = {
                     to: toEmail,
-                    from: "prem@thundergits.com", // Must be verified on SendGrid
+                    from: {
+                        name: fromName,
+                        email: fromEmail
+                    },
                     subject,
                     html: personalizedHtml,
                 };
@@ -54,7 +67,7 @@ exports.sendBulkMail = async (contacts, subject, template, credential) => {
             } else {
                 // ✅ Send using Nodemailer
                 const mailOptions = {
-                    from: `"Thunder GTS" <${fromEmail}>`,
+                    from: `"${fromName}" <${fromEmail}>`,
                     to: toEmail,
                     subject,
                     html: personalizedHtml,

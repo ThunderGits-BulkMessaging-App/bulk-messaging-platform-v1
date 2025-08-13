@@ -12,7 +12,10 @@ exports.getUserEmailCampaigns = (organisationId, status, page = 1, limit = 10) =
 
 exports.getEmailCampaignById = async (organisationId, id) => {
   const campaign = await repo.findById(id);
-  if (!campaign || campaign.organisation.toString() !== organisationId) {
+  console.log("in get email campaign by id", campaign, organisationId)
+  // Ensure the campaign belongs to the organisation
+
+  if (!campaign || campaign.organisation.toString() !== organisationId.toString()) {
     const err = new Error('Email campaign not found or unauthorized');
     err.status = 404;
     throw err;

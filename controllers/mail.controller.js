@@ -16,7 +16,7 @@ exports.sendMails = async ({ campaignId, organisationId, }) => {
     if (!campaign) {
         return { success: false, message: 'Campaign not found' };
     }
-
+    console.log("in send Email", organisationId)
     const credential = await EmailCredential.findOne({ organisation: organisationId });
     if (!credential) {
         return { success: false, message: "Email credential not found" };
@@ -28,7 +28,7 @@ exports.sendMails = async ({ campaignId, organisationId, }) => {
     credential.password = decryptedPassword; // Update the credential with decrypted password
     // Now you can use decryptedPassword for sending emails
 
-
+    console.log("in send email 2")
     // 3. Fetch all contacts in the campaign's groups
     const contacts = await Contact.find({ groups: { $in: campaign.groupIds } });
 
@@ -36,6 +36,7 @@ exports.sendMails = async ({ campaignId, organisationId, }) => {
     const templateContent = campaign.templateId ? campaign.templateId.content : campaign.body;
 
     credential.useSendGrid = true
+    console.log("in send email 3")
     // 5. Send mails using customized template
     const results = await sendBulkMail(contacts, campaign.subject, templateContent, credential);
     console.log(results)
